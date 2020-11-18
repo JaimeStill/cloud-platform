@@ -3,6 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { environment } from '../environments/environment';
+
+import {
+  CoreModule,
+  MaterialModule
+} from 'core';
 
 @NgModule({
   declarations: [
@@ -10,6 +16,8 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
+    CoreModule.forRoot({ server: environment.server, api: environment.api }),
+    MaterialModule,
     AppRoutingModule
   ],
   providers: [],

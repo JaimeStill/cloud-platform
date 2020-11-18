@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using CloudPlatform.Core.Extensions;
 using CloudPlatform.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -58,6 +59,8 @@ namespace CloudPlatform.Web
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CloudPlatform.Web v1"));
             }
+
+            app.UseExceptionHandler(err => err.HandleError());
 
             app.UseRouting();
 
