@@ -6,16 +6,27 @@ import {
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material.module';
+import { Components } from './components';
+import { Dialogs } from './dialogs';
 import { ServerConfig } from './config';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ...Components,
+    ...Dialogs
+  ],
+  entryComponents: [
+    ...Dialogs
+  ],
   imports: [
     CommonModule,
     HttpClientModule,
     MaterialModule
   ],
-  exports: []
+  exports: [
+    ...Components,
+    ...Dialogs
+  ]
 })
 export class CoreModule {
   static forRoot(config: ServerConfig): ModuleWithProviders<CoreModule> {

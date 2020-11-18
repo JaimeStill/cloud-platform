@@ -1,0 +1,10 @@
+<section fxLayout="row"
+         fxLayoutAlign="start center"
+         class="background card card-outline-divider"
+         [style.width.px]="size">
+  <span class="m8"
+        fxFlex>{{user?.username}}</span>
+  <section class="background stacked p8">
+    <ng-content></ng-content>
+  </section>
+</section>

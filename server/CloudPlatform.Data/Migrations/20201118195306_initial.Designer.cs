@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudPlatform.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201118183606_Initial")]
-    partial class Initial
+    [Migration("20201118195306_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -126,8 +126,8 @@ namespace CloudPlatform.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("Theme")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("UseDarkTheme")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");

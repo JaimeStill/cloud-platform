@@ -1,0 +1,76 @@
+<section class="mat-app-background mat-typography"
+         [ngClass]="themeSvc.useDarkTheme ? 'app-dark' : 'app-light'"
+         [style.height.%]="100">
+  <mat-toolbar color="primary">
+    <span fxFlex>Login</span>
+    <button mat-icon-button
+            (click)="themeSvc.toggleTheme()">
+      <mat-icon class="color"
+                [ngClass]="themeSvc.useDarkTheme ? 'text' : 'warning'">
+        {{themeSvc.useDarkTheme ? 'brightness_3' : 'brightness_5'}}
+      </mat-icon>
+    </button>
+  </mat-toolbar>
+  <section fxLayout="column"
+           fxLayoutAlign="start start"
+           class="p8">
+    <h1 class="m4 mb8">New User</h1>
+    <section fxLayout="row"
+             fxLayoutAlign="start center">
+      <mat-form-field class="m4"
+                      [style.width.px]="420">
+        <mat-label>Username</mat-label>
+        <input matInput
+               #userInput
+               [(ngModel)]="user.username">
+        <mat-hint *ngIf="validName">Username is available</mat-hint>
+        <mat-hint class="color warn"
+                  *ngIf="validName === false">Username is taken</mat-hint>
+      </mat-form-field>
+      <button mat-stroked-button
+              color="primary"
+              class="m4"
+              [disabled]="!(validName)"
+              (click)="addUser()">
+        Add User
+      </button>
+    </section>
+  </section>
+  <mat-toolbar>Users</mat-toolbar>
+  <ng-template #loading>
+    <mat-progress-bar mode="indeterminate"
+                      color="accent"></mat-progress-bar>
+  </ng-template>
+  <ng-container *ngIf="userSvc.users$ | async as users else loading">
+    <ng-container *ngIf="users.length > 0">
+      <section class="p8 pl12"
+               [style.width.px]="420">
+        <searchbar label="Search Users"
+                   [minimum]="1"
+                   (search)="userSvc.searchUsers($event)"
+                   (clear)="userSvc.getUsers()"></searchbar>
+      </section>
+      <section fxLayout="row | wrap"
+               fxLayoutAlign="start start"
+               class="p8">
+        <user-card *ngFor="let u of users"
+                   class="m4"
+                   [user]="u">
+          <button mat-icon-button
+                  color="warn"
+                  matTooltip="Remove"
+                  (click)="removeUser(u)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button
+                  matTooltip="Select"
+                  (click)="selectUser(u)">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </button>
+        </user-card>
+      </section>
+    </ng-container>
+    <h2 class="m8"
+        *ngIf="!(users.length > 0)">No Users Available</h2>
+  </ng-container>
+</section>
