@@ -9,6 +9,7 @@ namespace CloudPlatform.Data.Entities
         public string Theme { get; set; }
 
         public IEnumerable<Folder> Folders { get; set; }
+        public IEnumerable<SharedFolder> SharedFolders { get; set; }
         public IEnumerable<SharedNote> SharedNotes { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using CloudPlatform.Data.Entities;
 
 namespace CloudPlatform.Data
 {
@@ -15,6 +16,22 @@ namespace CloudPlatform.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder
+                .Entity<User>()
+                .HasMany(x => x.SharedFolders)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
+                .Entity<User>()
+                .HasMany(x => x.SharedNotes)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder
                 .Model
                 .GetEntityTypes()

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using CloudPlatform.Core;
-using CloudPlatform.Core.ApiQuery;
 using CloudPlatform.Data.Entities;
 
 namespace CloudPlatform.Data.Extensions
