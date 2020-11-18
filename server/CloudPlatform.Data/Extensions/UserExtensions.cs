@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-using CloudPlatform.Core;
 using CloudPlatform.Data.Entities;
 
 namespace CloudPlatform.Data.Extensions
@@ -53,7 +52,7 @@ namespace CloudPlatform.Data.Extensions
         {
             if (string.IsNullOrEmpty(user.Username))
             {
-                throw new AppException("User must have a Username", ExceptionType.Validation);
+                throw new Exception("User must have a Username");
             }
 
             var check = await db.Users
@@ -64,7 +63,7 @@ namespace CloudPlatform.Data.Extensions
 
             if (check != null)
             {
-                throw new AppException($"{user.Username} is already a User", ExceptionType.Validation);
+                throw new Exception($"{user.Username} is already a User");
             }
 
             return true;

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-using CloudPlatform.Core;
 using CloudPlatform.Data.Entities;
 
 namespace CloudPlatform.Data.Extensions
@@ -74,7 +73,7 @@ namespace CloudPlatform.Data.Extensions
         {
             if (string.IsNullOrEmpty(folder.Name))
             {
-                throw new AppException("Folder must have a name", ExceptionType.Validation);
+                throw new Exception("Folder must have a name");
             }
 
             var check = await db.Folders
@@ -85,7 +84,7 @@ namespace CloudPlatform.Data.Extensions
 
             if (check != null)
             {
-                throw new AppException($"{folder.Name} is already a Folder", ExceptionType.Validation);
+                throw new Exception($"{folder.Name} is already a Folder");
             }
 
             return true;

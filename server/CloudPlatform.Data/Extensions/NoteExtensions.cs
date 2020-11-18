@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-using CloudPlatform.Core;
 using CloudPlatform.Data.Entities;
 
 namespace CloudPlatform.Data.Extensions
@@ -76,7 +75,7 @@ namespace CloudPlatform.Data.Extensions
         {
             if (string.IsNullOrEmpty(note.Title))
             {
-                throw new AppException("Note must have a name", ExceptionType.Validation);
+                throw new Exception("Note must have a name");
             }
 
             var check = await db.Notes
@@ -87,7 +86,7 @@ namespace CloudPlatform.Data.Extensions
 
             if (check != null)
             {
-                throw new AppException($"{note.Title} is already a Note", ExceptionType.Validation);
+                throw new Exception($"{note.Title} is already a Note");
             }
 
             return true;
