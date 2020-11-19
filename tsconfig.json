@@ -24,5 +24,12 @@
     "plugins": [
       { "name": "@angular/language-service" }
     ]
-  }
+  },
+  "exclude": [
+    ".vscode/*",
+    "assets/*",
+    "dist/*",
+    "server/*",
+    "theme/*"
+  ]
 }
