@@ -86,10 +86,7 @@ export class UserService {
   updateUser = (user: User): Promise<boolean> => new Promise((resolve) => {
     this.http.post(`${this.config.api}user/updateUser`, user)
       .subscribe(
-        () => {
-          this.snacker.sendSuccessMessage(`${user.username} successfully updated`);
-          resolve(true);
-        },
+        () => resolve(true),
         err => {
           this.snacker.sendErrorMessage(err.error);
           resolve(false);

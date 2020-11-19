@@ -2,5 +2,5 @@
   <login-view></login-view>
 </ng-template>
 <ng-container *ngIf="userSvc.currentUser$ | async as user else login">
-  <p>User: {{user.username}}</p>
+  <layout-view [user]="user"></layout-view>
 </ng-container>

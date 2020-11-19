@@ -7,12 +7,22 @@ html {
 }
 
 html,
-body {
+body,
+.app-frame {
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+.app-container {
+  overflow: auto;
+  height: calc(100 - 64px);
+  box-sizing: border-box;
 }
 
 @media (min-width: 0) and (max-width: 599px) {
-
+  .app-container {
+    height: calc(100% - 56px);
+  }
 }

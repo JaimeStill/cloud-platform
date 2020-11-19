@@ -1,0 +1,16 @@
+<section class="mat-app-background mat-typography app-frame"
+         [ngClass]="themeSvc.useDarkTheme ? 'app-dark' : 'app-light'">
+  <mat-toolbar color="primary">
+    <span fxFlex>Notes</span>
+    <button mat-icon-button
+            (click)="toggleTheme()">
+      <mat-icon class="color"
+                [ngClass]="themeSvc.useDarkTheme ? 'text' : 'warning'">
+        {{themeSvc.useDarkTheme ? 'brightness_3' : 'brightness_5'}}
+      </mat-icon>
+    </button>
+  </mat-toolbar>
+  <section class="app-container">
+    <router-outlet></router-outlet>
+  </section>
+</section>
