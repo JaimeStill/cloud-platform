@@ -25,8 +25,8 @@ namespace CloudPlatform.Web.Controllers
         [HttpGet("[action]/{id}")]
         public async Task<Note> GetNote([FromRoute]int id) => await db.GetNote(id);
 
-        [HttpPost("[action]/{id}")]
-        public async Task<List<Note>> SearchNotes([FromRoute] int id, [FromBody] string search) =>
+        [HttpGet("[action]/{id}/{search}")]
+        public async Task<List<Note>> SearchNotes([FromRoute] int id, [FromRoute] string search) =>
             await db.SearchNotes(id, search);
 
         [HttpPost("[action]")]

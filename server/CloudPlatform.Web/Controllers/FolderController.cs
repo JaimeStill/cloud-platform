@@ -25,8 +25,8 @@ namespace CloudPlatform.Web.Controllers
         [HttpGet("[action]/{id}")]
         public async Task<Folder> GetFolder([FromRoute]int id) => await db.GetFolder(id);
 
-        [HttpPost("[action]/{id}")]
-        public async Task<List<Folder>> SearchFolders([FromRoute] int id, [FromBody] string search) =>
+        [HttpGet("[action]/{id}/{search}")]
+        public async Task<List<Folder>> SearchFolders([FromRoute] int id, [FromRoute] string search) =>
             await db.SearchFolders(id, search);
 
         [HttpPost("[action]")]
