@@ -1,2 +1,6 @@
-<section class="mat-app-background mat-typography app-dark p8" [style.height.%]="100">
-</section>
+<ng-template #login>
+  <login-view></login-view>
+</ng-template>
+<ng-container *ngIf="userSvc.currentUser$ | async as user else login">
+  <p>User: {{user.username}}</p>
+</ng-container>

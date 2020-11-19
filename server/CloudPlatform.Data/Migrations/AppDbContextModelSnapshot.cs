@@ -124,8 +124,8 @@ namespace CloudPlatform.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("Theme")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("UseDarkTheme")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");

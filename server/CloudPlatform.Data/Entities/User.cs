@@ -6,7 +6,7 @@ namespace CloudPlatform.Data.Entities
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        public string Theme { get; set; }
+        public bool UseDarkTheme { get; set; }
 
         public IEnumerable<Folder> Folders { get; set; }
         public IEnumerable<SharedFolder> SharedFolders { get; set; }
