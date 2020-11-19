@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { UserService } from './api';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,15 @@ export class ThemeService {
   }
 
   constructor(
+    private userSvc: UserService,
     private overlay: OverlayContainer
   ) {
+    this.userSvc.currentUser$.subscribe(user => {
+      if (user) {
+        this.useDarkTheme = user.useDarkTheme;
+        this.setOverlayContainerTheme();
+      }
+    })
     this.setOverlayContainerTheme();
   }
 
