@@ -22,12 +22,14 @@ namespace CloudPlatform.Web.Controllers
         [HttpGet("[action]")]
         public async Task<List<User>> GetUsers() => await db.GetUsers();
 
+        [HttpGet("[action]/{search}")]
+        public async Task<List<User>> SearchUsers([FromRoute]string search) => await db.SearchUsers(search);
+
         [HttpGet("[action]/{username}")]
         public async Task<User> GetUser([FromRoute]string userName) => await db.GetUser(userName);
 
         [HttpPost("[action]")]
-        public async Task<List<User>> SearchUsers([FromBody] string search) =>
-            await db.SearchUsers( search);
+        public async Task<bool> ValidateUsername([FromBody]User user) => await db.ValidateUsername(user);
 
         [HttpPost("[action]")]
         public async Task AddUser([FromBody] User User) => await db.AddUser(User);
