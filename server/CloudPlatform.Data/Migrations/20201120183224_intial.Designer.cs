@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudPlatform.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201118195306_initial")]
-    partial class initial
+    [Migration("20201120183224_intial")]
+    partial class intial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,6 +125,31 @@ namespace CloudPlatform.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<string>("EditorFont")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Cascadia Code");
+
+                    b.Property<int>("EditorFontSize")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(14);
+
+                    b.Property<int>("EditorPadding")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(8);
+
+                    b.Property<int>("EditorTabSpacing")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2);
+
+                    b.Property<string>("SnippetTheme")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("snippet-nord");
 
                     b.Property<bool>("UseDarkTheme")
                         .HasColumnType("bit");

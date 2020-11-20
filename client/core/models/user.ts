@@ -7,6 +7,12 @@ export interface User {
   username: string;
   useDarkTheme: boolean;
 
+  editorFontSize: number;
+  editorPadding: number;
+  editorTabSpacing: number;
+  editorFont: string;
+  snippetTheme: string;
+
   folders: Folder[];
   sharedFolders: SharedFolder[];
   sharedNotes: SharedNote[];

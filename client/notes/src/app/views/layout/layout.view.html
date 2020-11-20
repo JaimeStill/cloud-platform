@@ -1,7 +1,13 @@
 <section class="mat-app-background mat-typography app-frame"
-         [ngClass]="themeSvc.useDarkTheme ? 'app-dark' : 'app-light'">
+         [ngClass]="[themeSvc.useDarkTheme ? 'app-dark' : 'app-light', themeSvc.snippetTheme]">
   <mat-toolbar color="primary">
     <span fxFlex>Notes</span>
+    <button mat-icon-button routerLink="markdown" routerLinkActive="active">
+      <mat-icon>wysiwyg</mat-icon>
+    </button>
+    <button mat-icon-button (click)="setPreferences()">
+      <mat-icon>settings</mat-icon>
+    </button>
     <button mat-icon-button
             (click)="toggleTheme()">
       <mat-icon class="color"

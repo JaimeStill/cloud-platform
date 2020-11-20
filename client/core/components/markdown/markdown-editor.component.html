@@ -1,0 +1,10 @@
+<textarea matInput
+          class="card-outline-divider m0 editor"
+          placeholder="Markdown"
+          spellcheck="false"
+          #editor
+          [ngClass]="resize ? 'resize-horizontal' : 'no-resize'"
+          [style.font-size.px]="fontSize"
+          [style.padding.px]="padding"
+          [style.font-family]="font"
+          (keydown)="checkInput($event)"></textarea>

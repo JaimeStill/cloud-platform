@@ -6,7 +6,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Note } from '../../models';
-import { SnackerService } from '../../services';
+import { SnackerService } from '../snacker.service';
 import { ServerConfig } from '../../config';
 
 @Injectable()

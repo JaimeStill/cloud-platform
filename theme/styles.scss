@@ -133,16 +133,20 @@
   overflow-y: auto;
 }
 
+.no-resize {
+  resize: none!important;
+}
+
 .resize {
-  resize: both;
+  resize: both!important;
 }
 
 .resize-horizontal {
-  resize: horizontal;
+  resize: horizontal!important;
 }
 
 .resize-vertical {
-  resize: vertical;
+  resize: vertical!important;
 }
 
 .cursor-pointer {

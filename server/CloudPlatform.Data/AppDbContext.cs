@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using CloudPlatform.Data.Entities;
+using CloudPlatform.Data.Extensions;
 
 namespace CloudPlatform.Data
 {
@@ -16,6 +17,8 @@ namespace CloudPlatform.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.SetDefaultUserValues();
+
             modelBuilder
                 .Entity<User>()
                 .HasMany(x => x.SharedFolders)

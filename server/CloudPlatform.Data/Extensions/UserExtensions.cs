@@ -15,6 +15,29 @@ namespace CloudPlatform.Data.Extensions
         static IQueryable<User> Search(this IQueryable<User> users, string search) =>
             users.Where(x => x.Username.ToLower().Contains(search.ToLower()));
 
+        public static void SetDefaultUserValues(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .Property<int>(user => user.EditorFontSize)
+                .HasDefaultValue(14);
+
+            modelBuilder.Entity<User>()
+                .Property<int>(user => user.EditorPadding)
+                .HasDefaultValue(8);
+
+            modelBuilder.Entity<User>()
+                .Property<int>(user => user.EditorTabSpacing)
+                .HasDefaultValue(2);
+
+            modelBuilder.Entity<User>()
+                .Property<string>(user => user.EditorFont)
+                .HasDefaultValue("Cascadia Code");
+
+            modelBuilder.Entity<User>()
+                .Property<string>(user => user.SnippetTheme)
+                .HasDefaultValue("snippet-nord");
+        }
+
         public static async Task<List<User>> GetUsers(this AppDbContext db) =>
             await db.Users
                 .OrderBy(x => x.Username)

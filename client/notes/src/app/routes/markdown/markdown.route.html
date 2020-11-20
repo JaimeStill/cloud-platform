@@ -1,0 +1,26 @@
+<ng-template #loading>
+  <mat-progress-bar mode="indeterminate"
+                    color="accent"></mat-progress-bar>
+</ng-template>
+<ng-container *ngIf="userSvc.currentUser$ | async as user else loading">
+  <section class="p8"
+           fxLayout="row"
+           fxLayoutAlign="start stretch"
+           [style.height.%]="100">
+    <markdown-editor fxFlex
+                     [font]="user.editorFont"
+                     [fontSize]="user.editorFontSize"
+                     [padding]="user.editorPadding"
+                     [resize]="true"
+                     [tab]="user.editorTabSpacing"
+                     [style.height.%]="100"
+                     (sync)="syncMarkdown($event)"></markdown-editor>
+    <pre class="m0 ml8 p8 card-outline-divider"
+         *ngIf="!(content)"
+         fxFlex>Start typing to generate Markdown!</pre>
+    <section class="m0 ml8 p8 card-outline-divider"
+             fxFlex
+             *ngIf="content"
+             [innerHtml]="content"></section>
+  </section>
+</ng-container>

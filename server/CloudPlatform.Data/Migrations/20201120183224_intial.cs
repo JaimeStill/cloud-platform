@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CloudPlatform.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class intial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,12 @@ namespace CloudPlatform.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UseDarkTheme = table.Column<bool>(type: "bit", nullable: false)
+                    UseDarkTheme = table.Column<bool>(type: "bit", nullable: false),
+                    EditorPadding = table.Column<int>(type: "int", nullable: false, defaultValue: 8),
+                    EditorFontSize = table.Column<int>(type: "int", nullable: false, defaultValue: 14),
+                    EditorTabSpacing = table.Column<int>(type: "int", nullable: false, defaultValue: 2),
+                    EditorFont = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "Cascadia Code"),
+                    SnippetTheme = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "snippet-nord")
                 },
                 constraints: table =>
                 {

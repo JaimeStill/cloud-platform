@@ -1,0 +1,111 @@
+<div class="mat-typography">
+  <h2 mat-dialog-title>User Preferences</h2>
+  <mat-dialog-content>
+    <ng-template #loading>
+      <mat-progress-bar mode="indeterminate"
+                        color="accent"></mat-progress-bar>
+    </ng-template>
+    <ng-container *ngIf="snippetSvc.themes$ | async as themes else loading">
+      <section fxLayout="column"
+               fxLayoutAlign="start stretch"
+               *ngIf="markedSvc.fonts$ | async as fonts else loading">
+        <section fxLayout="row"
+                 fxLayoutAlign="start stretch"
+                 fxLayoutGap="8px"
+                 class="p8">
+          <section fxLayout="column"
+                   fxLayoutAlign="start stretch"
+                   fxLayoutGap="4px"
+                   fxFlex>
+            <h2 fxFlexAlign="center">Editor Preview</h2>
+            <textarea fxFlex
+                      class="my12"
+                      spellcheck="false"
+                      #editor
+                      [style.padding.px]="user.editorPadding"
+                      [style.font-family]="user.editorFont"
+                      [style.font-size.px]="user.editorFontSize"
+                      [style.resize]="'none'"
+                      [disabled]="true"></textarea>
+          </section>
+          <section fxLayout="column"
+                   fxLayoutAlign="start stretch"
+                   fxLayoutGap="4px"
+                   fxFlex>
+            <h2 fxFlexAlign="center">Snippet Preview</h2>
+            <section fxFlex
+                     class="m4 p0"
+                     [ngClass]="user.snippetTheme"
+                     [innerHtml]="example"
+                     *ngIf="example"></section>
+          </section>
+        </section>
+        <mat-form-field>
+          <mat-label>Snippet Theme</mat-label>
+          <mat-select [(ngModel)]="user.snippetTheme">
+            <mat-option *ngFor="let t of themes"
+                        [value]="t.css">{{t.label}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Editor Font</mat-label>
+          <mat-select [(ngModel)]="user.editorFont">
+            <mat-option *ngFor="let font of fonts"
+                        [value]="font">{{font}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section class="my12" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+          <span>App Theme</span>
+          <mat-icon class="color warning">brightness_5</mat-icon>
+          <mat-slide-toggle [checked]="user.useDarkTheme" (change)="setTheme($event)"></mat-slide-toggle>
+          <mat-icon color="primary">brightness_3</mat-icon>
+        </section>
+        <section class="my12"
+                 fxLayout="row"
+                 fxLayoutAlign="start center"
+                 fxLayoutGap="12px">
+          <label>Tab Spacing</label>
+          <mat-radio-group [(ngModel)]="user.editorTabSpacing"
+                           fxLayout="row"
+                           fxLayoutGap="16px">
+            <mat-radio-button [value]="2">Two Spaces</mat-radio-button>
+            <mat-radio-button [value]="4">Four Spaces</mat-radio-button>
+          </mat-radio-group>
+        </section>
+        <section fxLayout="row"
+                 fxLayoutAlign="start center"
+                 fxLayoutGap="8px">
+          <span>Editor Padding</span>
+          <mat-slider fxFlex
+                      [min]="4"
+                      [max]="24"
+                      [step]="4"
+                      [thumbLabel]="true"
+                      [value]="user.editorPadding"
+                      (input)="setPadding($event)"></mat-slider>
+          <span>{{user.editorPadding}}</span>
+        </section>
+        <section fxLayout="row"
+                 fxLayoutAlign="start center"
+                 fxLayoutGap="8px">
+          <span>Editor Font Size</span>
+          <mat-slider fxFlex
+                      [min]="10"
+                      [max]="18"
+                      [step]="1"
+                      [thumbLabel]="true"
+                      [value]="user.editorFontSize"
+                      (input)="setFontSize($event)"></mat-slider>
+          <span>{{user.editorFontSize}}</span>
+        </section>
+      </section>
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-stroked-button
+            class="color success"
+            (click)="save()">Save</button>
+    <button mat-stroked-button
+            mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</div>

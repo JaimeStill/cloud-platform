@@ -17,7 +17,7 @@ body,
 
 .app-container {
   overflow: auto;
-  height: calc(100 - 64px);
+  height: calc(100% - 64px);
   box-sizing: border-box;
 }
 
