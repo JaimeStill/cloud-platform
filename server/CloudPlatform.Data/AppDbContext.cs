@@ -20,10 +20,25 @@ namespace CloudPlatform.Data
             modelBuilder.SetDefaultUserValues();
 
             modelBuilder
+                .Entity<Folder>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Folders)
+                .HasForeignKey(x => x.Owner)
+                .HasPrincipalKey(x => x.Username);
+
+            modelBuilder
+                .Entity<Folder>()
+                .HasMany(x => x.Folders)
+                .WithOne(x => x.Parent)
+                .HasForeignKey(x => x.FolderId)
+                .IsRequired(false);
+
+            modelBuilder
                 .Entity<User>()
                 .HasMany(x => x.SharedFolders)
                 .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId)
+                .HasForeignKey(x => x.Username)
+                .HasPrincipalKey(x => x.Username)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -31,7 +46,8 @@ namespace CloudPlatform.Data
                 .Entity<User>()
                 .HasMany(x => x.SharedNotes)
                 .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId)
+                .HasForeignKey(x => x.Username)
+                .HasPrincipalKey(x => x.Username)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 

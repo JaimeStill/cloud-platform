@@ -5,8 +5,9 @@ import { SharedNote } from './shared-note';
 export interface Note {
   id: number;
   folderId: number;
-  title: string;
+  name: string;
   value: string;
+  path: string;
   dateCreated: Date;
   dateModified: Date;
 

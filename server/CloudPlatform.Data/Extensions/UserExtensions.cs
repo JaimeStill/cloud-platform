@@ -12,6 +12,8 @@ namespace CloudPlatform.Data.Extensions
 {
     public static class UserExtensions
     {
+        #region EF Infrastructure
+
         static IQueryable<User> Search(this IQueryable<User> users, string search) =>
             users.Where(x => x.Username.ToLower().Contains(search.ToLower()));
 
@@ -37,6 +39,20 @@ namespace CloudPlatform.Data.Extensions
                 .Property<string>(user => user.SnippetTheme)
                 .HasDefaultValue("snippet-nord");
         }
+
+        static void RemoveSharedFolders(this User user, AppDbContext db) =>
+            db.SharedFolders.RemoveRange(
+                db.SharedFolders.Where(x => x.Username == user.Username)
+            );
+
+        static void RemoveSharedNotes(this User user, AppDbContext db) =>
+            db.SharedNotes.RemoveRange(
+                db.SharedNotes.Where(x => x.Username == user.Username)
+            );
+
+        #endregion
+
+        #region CRUD
 
         public static async Task<List<User>> GetUsers(this AppDbContext db) =>
             await db.Users
@@ -94,18 +110,6 @@ namespace CloudPlatform.Data.Extensions
             await db.SaveChangesAsync();
         }
 
-        static void RemoveSharedFolders(this User user, AppDbContext db)
-        {
-            var sharedFolders = db.SharedFolders.Where(x => x.UserId == user.Id);
-            db.SharedFolders.RemoveRange(sharedFolders);
-        }
-
-        static void RemoveSharedNotes(this User user, AppDbContext db)
-        {
-            var sharedNotes = db.SharedNotes.Where(x => x.UserId == user.Id);
-            db.SharedNotes.RemoveRange(sharedNotes);
-        }
-
         static async Task<bool> Validate(this User user, AppDbContext db)
         {
             if (string.IsNullOrEmpty(user.Username))
@@ -120,5 +124,43 @@ namespace CloudPlatform.Data.Extensions
 
             return true;
         }
+
+        #endregion
+
+        #region Shared Folders / Notes
+
+        public static async Task<List<string>> GetSharedFolderUsers(this AppDbContext db, int folderId) =>
+            await db.SharedFolders
+                .Where(x => x.FolderId == folderId)
+                .Select(x => x.Username)
+                .ToListAsync();
+
+        public static async Task<List<User>> GetAvailableFolderUsers(this AppDbContext db, int folderId)
+        {
+            var names = await db.GetSharedFolderUsers(folderId);
+
+            return await db.Users
+                .Where(x => !names.Contains(x.Username))
+                .OrderBy(x => x.Username)
+                .ToListAsync();
+        }
+
+        public static async Task<List<string>> GetSharedNoteUsers(this AppDbContext db, int noteId) =>
+            await db.SharedNotes
+                .Where(x => x.NoteId == noteId)
+                .Select(x => x.Username)
+                .ToListAsync();
+
+        public static async Task<List<User>> GetAvailableNoteUsers(this AppDbContext db, int noteId)
+        {
+            var names = await db.GetSharedNoteUsers(noteId);
+
+            return await db.Users
+                .Where(x => !names.Contains(x.Username))
+                .OrderBy(x => x.Username)
+                .ToListAsync();
+        }
+
+        #endregion
     }
 }

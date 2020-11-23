@@ -3,19 +3,23 @@ import {
   Optional
 } from '@angular/core';
 
+import {
+  Folder,
+  User
+} from '../../models';
+
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { SnackerService } from '../snacker.service';
 import { ServerConfig } from '../../config';
-import { Folder } from 'client/core/models';
 
 @Injectable()
 export class FolderService {
   private folders = new BehaviorSubject<Folder[]>(null);
-  private folder = new BehaviorSubject<Folder>(null);
+  private sharedFolders = new BehaviorSubject<Folder[]>(null);
 
   folders$ = this.folders.asObservable();
-  folder$ = this.folder.asObservable();
+  sharedFolders$ = this.sharedFolders.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -23,45 +27,58 @@ export class FolderService {
     @Optional() private config: ServerConfig
   ) { }
 
-  getFolders = (userId: number) => this.http.get<Folder[]>(`${this.config.api}folder/getFolders/${userId}`)
+  getRootFolders = (owner: string) => this.http.get<Folder[]>(`${this.config.api}folder/getRootFolders/${owner}`)
     .subscribe(
       data => this.folders.next(data),
       err => this.snacker.sendErrorMessage(err.error)
-    )
+    );
 
-  searchFolders = (userId: number, search: string) =>
-    this.http.get<Folder[]>(`${this.config.api}folder/searchFolders/${userId}/${search}`)
-      .subscribe(
-        data => this.folders.next(data),
-        err => this.snacker.sendErrorMessage(err.error)
-      )
+  getRootSharedFolders = (owner: string) => this.http.get<Folder[]>(`${this.config.api}folder/getRootSharedFolders/${owner}`)
+    .subscribe(
+      data => this.sharedFolders.next(data),
+      err => this.snacker.sendErrorMessage(err.error)
+    );
 
-  getFolder = (id: number): Promise<Folder> => new Promise((resolve) => {
-    this.http.get<Folder>(`${this.config.api}/folder/getFolder/${id}`)
+  getSubFolders = (folderId: number) => this.http.get<Folder[]>(`${this.config.api}folder/getSubFolders/${folderId}`)
+    .subscribe(
+      data => this.folders.next(data),
+      err => this.snacker.sendErrorMessage(err.error)
+    );
+
+  getFolder = (owner: string, path: string): Promise<Folder> => new Promise((resolve) => {
+    this.http.get<Folder>(`${this.config.api}folder/getFolder/${owner}/${path}`)
       .subscribe(
-        data => {
-          this.folder.next(data);
-          resolve(data);
-        },
+        data => resolve(data),
         err => {
           this.snacker.sendErrorMessage(err.error);
           resolve(null);
         }
-      );
+      )
   })
 
-  addFolder = (folder: Folder): Promise<Folder> => new Promise((resolve) => {
-    this.http.post<Folder>(`${this.config.api}/folder/addFolder`, folder)
+  validateFolderName = (folder: Folder): Promise<boolean> => new Promise((resolve) => {
+    this.http.post<boolean>(`${this.config.api}folder/validateFolderName`, folder)
       .subscribe(
-        data => {
+        data => resolve(data),
+        err => {
+          this.snacker.sendErrorMessage(err.error);
+          resolve(false);
+        }
+      )
+  })
+
+  addFolder = (folder: Folder): Promise<boolean> => new Promise((resolve) => {
+    this.http.post(`${this.config.api}folder/addFolder`, folder)
+      .subscribe(
+        () => {
           this.snacker.sendSuccessMessage(`${folder.name} successfully created`);
-          resolve(data);
+          resolve(true);
         },
         err => {
           this.snacker.sendErrorMessage(err.error);
-          resolve(null);
+          resolve(false);
         }
-      );
+      )
   })
 
   updateFolder = (folder: Folder): Promise<boolean> => new Promise((resolve) => {
@@ -90,5 +107,33 @@ export class FolderService {
           resolve(false);
         }
       );
+  })
+
+  shareFolder = (folder: Folder, users: User[]): Promise<boolean> => new Promise((resolve) => {
+    this.http.post(`${this.config.api}folder/shareFolder/${folder.id}`, users)
+      .subscribe(
+        () => {
+          this.snacker.sendSuccessMessage(`${folder.name} successfully shared`);
+          resolve(true);
+        },
+        err => {
+          this.snacker.sendErrorMessage(err.error);
+          resolve(false);
+        }
+      )
+  })
+
+  unshareFolder = (folder: Folder, username: string): Promise<boolean> => new Promise((resolve) => {
+    this.http.get(`${this.config.api}folder/unshareFolder/${folder.id}/${username}`)
+      .subscribe(
+        () => {
+          this.snacker.sendSuccessMessage(`${username} removed from ${folder.name}`);
+          resolve(true);
+        },
+        err => {
+          this.snacker.sendErrorMessage(err.error);
+          resolve(false);
+        }
+      )
   })
 }

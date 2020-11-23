@@ -4,7 +4,7 @@ import { User } from './user';
 export interface SharedNote {
   id: number;
   noteId: number;
-  userId: number;
+  username: string;
 
   note: Note;
   user: User;

@@ -14,10 +14,12 @@ import { User } from '../../models';
 })
 export class UserService {
   private currentUser = new BehaviorSubject<User>(null);
+  private usernames = new BehaviorSubject<string[]>(null);
   private users = new BehaviorSubject<User[]>(null);
   private user = new BehaviorSubject<User>(null);
 
   currentUser$ = this.currentUser.asObservable();
+  usernames$ = this.usernames.asObservable();
   users$ = this.users.asObservable();
   user$ = this.user.asObservable();
 
@@ -107,4 +109,28 @@ export class UserService {
         }
       );
   })
+
+  getSharedFolderUsers = (folderId: number) => this.http.get<string[]>(`${this.config.api}user/getSharedFolderUsers/${folderId}`)
+    .subscribe(
+      data => this.usernames.next(data),
+      err => this.snacker.sendErrorMessage(err.error)
+    )
+
+  getAvailableFolderUsers = (folderId: number) => this.http.get<User[]>(`${this.config.api}user/getAvailableFolderUsers/${folderId}`)
+    .subscribe(
+      data => this.users.next(data),
+      err => this.snacker.sendErrorMessage(err.error)
+    )
+
+  getSharedNoteUsers = (noteId: number) => this.http.get<string[]>(`${this.config.api}user/getSharedNoteUsers/${noteId}`)
+    .subscribe(
+      data => this.usernames.next(data),
+      err => this.snacker.sendErrorMessage(err.error)
+    )
+
+  getAvailableNoteUsers = (noteId: number) => this.http.get<User[]>(`${this.config.api}user/getAvailableNoteUsers/${noteId}`)
+    .subscribe(
+      data => this.users.next(data),
+      err => this.snacker.sendErrorMessage(err.error)
+    )
 }

@@ -4,7 +4,7 @@ import { User } from './user';
 export interface SharedFolder {
   id: number;
   folderId: number;
-  userId: number;
+  username: string;
 
   folder: Folder;
   user: User;

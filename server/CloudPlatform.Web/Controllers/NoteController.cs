@@ -19,15 +19,14 @@ namespace CloudPlatform.Web.Controllers
             this.db = db;
         }
 
-        [HttpGet("[action]/{id}")]
-        public async Task<List<Note>> GetNotes([FromRoute]int id) => await db.GetNotes(id);
+        [HttpGet("[action]/{folderId}")]
+        public async Task<List<Note>> GetNotes([FromRoute]int folderId) => await db.GetNotes(folderId);
 
-        [HttpGet("[action]/{id}")]
-        public async Task<Note> GetNote([FromRoute]int id) => await db.GetNote(id);
+        [HttpGet("[action]/{owner}/{path}")]
+        public async Task<Note> GetNote([FromRoute]string owner, [FromRoute]string path) => await db.GetNote(owner, path);
 
-        [HttpGet("[action]/{id}/{search}")]
-        public async Task<List<Note>> SearchNotes([FromRoute] int id, [FromRoute] string search) =>
-            await db.SearchNotes(id, search);
+        [HttpPost("[action]")]
+        public async Task<bool> ValidateNoteName([FromBody]Note note) => await db.ValidateNoteName(note);
 
         [HttpPost("[action]")]
         public async Task AddNote([FromBody] Note note) => await db.AddNote(note);
@@ -38,11 +37,11 @@ namespace CloudPlatform.Web.Controllers
         [HttpPost("[action]")]
         public async Task RemoveNote([FromBody] Note note) => await db.RemoveNote(note);
 
-        [HttpPost("[action]/{id}")]
-        public async Task ShareNote([FromRoute]int id, [FromBody] List<User> users) =>
-            await db.ShareNote(id, users);
+        [HttpPost("[action]/{noteId}")]
+        public async Task ShareNote([FromRoute]int noteId, [FromBody] List<User> users) =>
+            await db.ShareNote(noteId, users);
 
-        [HttpPost("[action]")]
-        public async Task UnshareNote([FromBody] SharedNote note) => await db.UnshareNote(note);
+        [HttpGet("[action]/{noteId}/{username}")]
+        public async Task UnshareNote([FromRoute]int noteId, [FromRoute]string username) => await db.UnshareNote(noteId, username);
     }
 }

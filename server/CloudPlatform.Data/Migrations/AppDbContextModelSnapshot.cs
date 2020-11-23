@@ -26,15 +26,23 @@ namespace CloudPlatform.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int?>("FolderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Owner")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FolderId");
+
+                    b.HasIndex("Owner");
 
                     b.ToTable("Folder");
                 });
@@ -55,7 +63,10 @@ namespace CloudPlatform.Data.Migrations
                     b.Property<int>("FolderId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
@@ -81,8 +92,9 @@ namespace CloudPlatform.Data.Migrations
                     b.Property<int?>("NoteId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -90,7 +102,7 @@ namespace CloudPlatform.Data.Migrations
 
                     b.HasIndex("NoteId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Username");
 
                     b.ToTable("SharedFolder");
                 });
@@ -105,14 +117,15 @@ namespace CloudPlatform.Data.Migrations
                     b.Property<int>("NoteId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NoteId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Username");
 
                     b.ToTable("SharedNote");
                 });
@@ -153,7 +166,8 @@ namespace CloudPlatform.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -162,11 +176,16 @@ namespace CloudPlatform.Data.Migrations
 
             modelBuilder.Entity("CloudPlatform.Data.Entities.Folder", b =>
                 {
+                    b.HasOne("CloudPlatform.Data.Entities.Folder", "Parent")
+                        .WithMany("Folders")
+                        .HasForeignKey("FolderId");
+
                     b.HasOne("CloudPlatform.Data.Entities.User", "User")
                         .WithMany("Folders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Owner")
+                        .HasPrincipalKey("Username");
+
+                    b.Navigation("Parent");
 
                     b.Navigation("User");
                 });
@@ -196,7 +215,8 @@ namespace CloudPlatform.Data.Migrations
 
                     b.HasOne("CloudPlatform.Data.Entities.User", "User")
                         .WithMany("SharedFolders")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Username")
+                        .HasPrincipalKey("Username")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -215,7 +235,8 @@ namespace CloudPlatform.Data.Migrations
 
                     b.HasOne("CloudPlatform.Data.Entities.User", "User")
                         .WithMany("SharedNotes")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Username")
+                        .HasPrincipalKey("Username")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -226,6 +247,8 @@ namespace CloudPlatform.Data.Migrations
 
             modelBuilder.Entity("CloudPlatform.Data.Entities.Folder", b =>
                 {
+                    b.Navigation("Folders");
+
                     b.Navigation("Notes");
 
                     b.Navigation("SharedFolders");

@@ -19,15 +19,20 @@ namespace CloudPlatform.Web.Controllers
             this.db = db;
         }
 
-        [HttpGet("[action]/{id}")]
-        public async Task<List<Folder>> GetFolders([FromRoute]int id) => await db.GetFolders(id);
+        [HttpGet("[action]/{owner}")]
+        public async Task<List<Folder>> GetRootFolders([FromRoute]string owner) => await db.GetRootFolders(owner);
 
-        [HttpGet("[action]/{id}")]
-        public async Task<Folder> GetFolder([FromRoute]int id) => await db.GetFolder(id);
+        [HttpGet("[action]/{owner}")]
+        public async Task<List<Folder>> GetRootSharedFolders([FromRoute]string owner) => await db.GetRootSharedFolders(owner);
 
-        [HttpGet("[action]/{id}/{search}")]
-        public async Task<List<Folder>> SearchFolders([FromRoute] int id, [FromRoute] string search) =>
-            await db.SearchFolders(id, search);
+        [HttpGet("[action]/{folderId}")]
+        public async Task<List<Folder>> GetSubFolders([FromRoute]int folderId) => await db.GetSubFolders(folderId);
+
+        [HttpGet("[action]/{owner}/{path}")]
+        public async Task<Folder> GetFolder([FromRoute]string owner, [FromRoute]string path) => await db.GetFolder(owner, path);
+
+        [HttpPost("[action]")]
+        public async Task<bool> ValidateFolderName([FromBody]Folder folder) => await db.ValidateFolderName(folder);
 
         [HttpPost("[action]")]
         public async Task AddFolder([FromBody] Folder Folder) => await db.AddFolder(Folder);
@@ -38,11 +43,11 @@ namespace CloudPlatform.Web.Controllers
         [HttpPost("[action]")]
         public async Task RemoveFolder([FromBody] Folder Folder) => await db.RemoveFolder(Folder);
 
-        [HttpPost("[action]/{id}")]
-        public async Task ShareFolder([FromRoute]int id, [FromBody] List<User> users) =>
-            await db.ShareFolder(id, users);
+        [HttpPost("[action]/{folderId}")]
+        public async Task ShareFolder([FromRoute]int folderId, [FromBody] List<User> users) =>
+            await db.ShareFolder(folderId, users);
 
-        [HttpPost("[action]")]
-        public async Task UnshareFolder([FromBody] SharedFolder Folder) => await db.UnshareFolder(Folder);
+        [HttpGet("[action]/{folderId}/{username}")]
+        public async Task UnshareFolder([FromRoute]int folderId, [FromRoute]string username) => await db.UnshareFolder(folderId, username);
     }
 }

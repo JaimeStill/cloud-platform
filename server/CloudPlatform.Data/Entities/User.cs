@@ -9,8 +9,8 @@ namespace CloudPlatform.Data.Entities
         public bool UseDarkTheme { get; set; }
 
         // Preferences
-        public int EditorPadding { get; set; }
         public int EditorFontSize { get; set; }
+        public int EditorPadding { get; set; }
         public int EditorTabSpacing { get; set; }
         public string EditorFont { get; set; }
         public string SnippetTheme { get; set; }

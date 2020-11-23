@@ -7,8 +7,9 @@ namespace CloudPlatform.Data.Entities
     {
         public int Id { get; set; }
         public int FolderId { get; set; }
-        public string Title { get; set; }
+        public string Name { get; set; }
         public string Value { get; set; }
+        public string Path { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
 

@@ -19,6 +19,8 @@ namespace CloudPlatform.Web.Controllers
             this.db = db;
         }
 
+        #region CRUD
+
         [HttpGet("[action]")]
         public async Task<List<User>> GetUsers() => await db.GetUsers();
 
@@ -39,5 +41,23 @@ namespace CloudPlatform.Web.Controllers
 
         [HttpPost("[action]")]
         public async Task RemoveUser([FromBody] User User) => await db.RemoveUser(User);
+
+        #endregion
+
+        #region Shared Folders / Notes
+
+        [HttpGet("[action]/{folderId}")]
+        public async Task<List<string>> GetSharedFolderUsers([FromRoute]int folderId) => await db.GetSharedFolderUsers(folderId);
+
+        [HttpGet("[action]/{folderId}")]
+        public async Task<List<User>> GetAvailableFolderUsers([FromRoute]int folderId) => await db.GetAvailableFolderUsers(folderId);
+
+        [HttpGet("[action]/{noteId}")]
+        public async Task<List<string>> GetSharedNoteUsers([FromRoute]int noteId) => await db.GetSharedNoteUsers(noteId);
+
+        [HttpGet("[action]/{noteId}")]
+        public async Task<List<User>> GetAvailableNoteUsers([FromRoute]int noteId) => await db.GetAvailableNoteUsers(noteId);
+
+        #endregion
     }
 }

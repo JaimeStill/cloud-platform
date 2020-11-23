@@ -3,9 +3,13 @@ import {
   Optional
 } from '@angular/core';
 
+import {
+  Note,
+  User
+} from '../../models';
+
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
-import { Note } from '../../models';
 import { SnackerService } from '../snacker.service';
 import { ServerConfig } from '../../config';
 
@@ -29,15 +33,8 @@ export class NoteService {
       err => this.snacker.sendErrorMessage(err.error)
     )
 
-  searchNotes = (folderId: number, search: string) =>
-    this.http.get<Note[]>(`${this.config.api}note/searchNotes/${folderId}/${search}`)
-      .subscribe(
-        data => this.notes.next(data),
-        err => this.snacker.sendErrorMessage(err.error)
-      )
-
   getNote = (id: number): Promise<Note> => new Promise((resolve) => {
-    this.http.get<Note>(`${this.config.api}/note/getNote/${id}`)
+    this.http.get<Note>(`${this.config.api}note/getNote/${id}`)
       .subscribe(
         data => {
           this.note.next(data);
@@ -50,11 +47,22 @@ export class NoteService {
       );
   })
 
+  validateNoteName = (note: Note): Promise<boolean> => new Promise((resolve) => {
+    this.http.post<boolean>(`${this.config.api}note/validateNoteName`, note)
+      .subscribe(
+        data => resolve(data),
+        err => {
+          this.snacker.sendErrorMessage(err.error);
+          resolve(false);
+        }
+      )
+  })
+
   addNote = (note: Note): Promise<Note> => new Promise((resolve) => {
     this.http.post<Note>(`${this.config.api}note/addNote`, note)
       .subscribe(
         data => {
-          this.snacker.sendSuccessMessage(`${note.title} successfully created`);
+          this.snacker.sendSuccessMessage(`${note.name} successfully created`);
           resolve(data);
         },
         err => {
@@ -65,10 +73,10 @@ export class NoteService {
   })
 
   updateNote = (note: Note): Promise<boolean> => new Promise((resolve) => {
-    this.http.post(`${this.config.api}/note/updateNote`, note)
+    this.http.post(`${this.config.api}note/updateNote`, note)
       .subscribe(
         () => {
-          this.snacker.sendSuccessMessage(`${note.title} successfully updated`);
+          this.snacker.sendSuccessMessage(`${note.name} successfully updated`);
           resolve(true);
         },
         err => {
@@ -82,7 +90,7 @@ export class NoteService {
     this.http.post(`${this.config.api}note/removeNote`, note)
       .subscribe(
         () => {
-          this.snacker.sendSuccessMessage(`${note.title} successfully removed`);
+          this.snacker.sendSuccessMessage(`${note.name} successfully removed`);
           resolve(true);
         },
         err => {
@@ -90,5 +98,33 @@ export class NoteService {
           resolve(false);
         }
       );
+  })
+
+  shareNote = (note: Note, users: User[]): Promise<boolean> => new Promise((resolve) => {
+    this.http.post(`${this.config.api}note/shareNote/${note.id}`, users)
+      .subscribe(
+        () => {
+          this.snacker.sendSuccessMessage(`${note.name} successfully shared`);
+          resolve(true);
+        },
+        err => {
+          this.snacker.sendErrorMessage(err.error);
+          resolve(false);
+        }
+      )
+  })
+
+  unshareFolder = (note: Note, username: string): Promise<boolean> => new Promise((resolve) => {
+    this.http.get(`${this.config.api}note/unshareNote/${note.id}/${username}`)
+      .subscribe(
+        () => {
+          this.snacker.sendSuccessMessage(`${username} removed from ${note.name}`);
+          resolve(true);
+        },
+        err => {
+          this.snacker.sendErrorMessage(err.error);
+          resolve(false);
+        }
+      )
   })
 }
